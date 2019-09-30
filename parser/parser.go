@@ -2,7 +2,12 @@ package parser
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"gopkg.in/yaml.v2"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type Item struct {
@@ -82,4 +87,26 @@ func ParseRequest(content interface{}) (req []byte, err error) {
 	}
 
 	return bytes, nil
+}
+
+func parseUnit(str string, dur time.Duration, unit string) (time.Duration, error) {
+	i, err := strconv.Atoi(strings.Replace(str, unit, "", -1))
+
+	if err != nil {
+		return 5 * time.Second, err
+	}
+
+	return time.Duration(i) * dur, nil
+}
+
+func ParseDuration(duration string) (dur time.Duration, err error) {
+	if strings.Contains(duration, "s") {
+		return parseUnit(duration, time.Second, "s")
+	} else if strings.Contains(duration, "m") {
+		return parseUnit(duration, time.Minute, "m")
+	} else if strings.Contains(duration, "h") {
+		return parseUnit(duration, time.Hour, "h")
+	}
+
+	return 5 * time.Second, errors.New(fmt.Sprintf("invalid duration format: %s", duration))
 }

@@ -46,6 +46,18 @@ to quickly create a Cobra application.`,
 			log.Fatal(err)
 		}
 
+		interval := 5 * time.Second
+
+		if config.Config.Watch.Interval != "" {
+			interval, err = parser.ParseDuration(config.Config.Watch.Interval)
+
+			if err != nil {
+				fmt.Println(fmt.Sprintf("Error parsing duration from YAML file: %s, using default of '5s'", err))
+			}
+		}
+
+		fmt.Println(fmt.Sprintf("watching for changes in %s", interval))
+
 		dataArr := make(map[string][][]float64)
 		pos := make(map[string]int)
 
@@ -146,7 +158,7 @@ to quickly create a Cobra application.`,
 				log.Fatal(err)
 			}
 
-			time.Sleep(5 * time.Second)
+			time.Sleep(interval)
 		}
 	},
 }
