@@ -23,6 +23,8 @@ Config template:
       arcentry:
         apiKey: {API_KEY}
         docId: {DOC_ID}
+      watch:
+        interval: "30s"
       containers:
         - id:
             chart:
@@ -38,12 +40,16 @@ Config template:
 
 The objects inside the `chart` element will display a char with the last 10 cpu and memory reads, while the `text` element will send only the value (10.5% for example)
 
+`watch`: is the interval it will wait to send the data
+
 Example:
 
     config:
       arcentry:
         apiKey: "37ad4c37179b4233ad3472ce1fedd9c537ad4c37179b4233ad3472ce1fedd9c5"
         docId: "37ad4c37-179b-4233-ad34-72ce1fedd9c5"
+      watch:
+        interval: "30s"
       containers:
         - b7252fa2:
             chart:
